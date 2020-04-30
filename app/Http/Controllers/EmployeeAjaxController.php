@@ -34,7 +34,6 @@ class EmployeeAjaxController extends Controller
         Employee::updateOrCreate(['id' => $request->eid],
             ['fname' => $request->fname, 'lname' => $request->lname,'dob' => $request->dob,'address' => $request->address,'city' => $request->city,'contactnumber'=> $request->contactnumber,'email'=> $request->email,'password'=> $request->password,'confirmpassword'=>$request->cmpassword]);
 
-
         return response()->json(['success'=>'Employee saved successfully.']);
     }
 }
