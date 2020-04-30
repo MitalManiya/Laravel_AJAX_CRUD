@@ -16,3 +16,5 @@ Route::get('/', function () {
 });
 
 Route::resource('ajaxproducts','ProductAjaxController');
+
+Route::resource('employees','EmployeeAjaxController');
