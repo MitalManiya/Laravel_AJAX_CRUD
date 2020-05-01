@@ -27,6 +27,7 @@
             <th>City</th>
             <th>Contect no.</th>
             <th>Email</th>
+            <th width="280px">Action</th>
         </tr>
         </thead>
         <tbody>
@@ -40,6 +41,16 @@
                 <h4 class="modal-title" id="modalheading"></h4>
             </div>
             <div class="modal-body">
+{{--                @if ($errors->any())--}}
+{{--                    <div class="alert alert-danger">--}}
+{{--                        <ul>--}}
+{{--                            @foreach ($errors->all() as $error)--}}
+{{--                                <li>{{ $error }}</li>--}}
+{{--                            @endforeach--}}
+{{--                        </ul>--}}
+{{--                    </div><br />--}}
+{{--                @endif--}}
+
                 <form id="empform" name="empform" class="form-horizontal" method="post">
                     <input type="hidden" name="eid" id="eid">
                     <div class="form-group">
@@ -47,6 +58,12 @@
                         <div class="col-sm-12">
                             <input type="text" class="form-control" id="fname" name="fname" placeholder="Enter First Name" value="" maxlength="50" required="">
                         </div>
+{{--                        @if ($errors->has('fname'))--}}
+
+{{--                            <span class="text-danger">{{ $errors->first('fname') }}</span>--}}
+
+{{--                        @endif--}}
+
                     </div>
                     <div class="form-group">
                         <label for="lname" class="col-sm-4 control-label">Last Name</label>
@@ -97,9 +114,9 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="cmpassword" class="col-sm-10 control-label">Confirm Password</label>
+                        <label for="confirmpassword" class="col-sm-10 control-label">Confirm Password</label>
                         <div class='col-sm-12'>
-                            <input type="password" class="form-control" id="cmpassword" name="cmpassword" required/>
+                            <input type="password" class="form-control" id="confirmpassword" name="confirmpassword" required/>
                         </div>
                     </div>
                     <div class="col-sm-12">
@@ -135,6 +152,7 @@
                 {data: 'city', name: 'city'},
                 {data: 'contactnumber', name: 'contactnumber'},
                 {data: 'email', name: 'email'},
+                {data: 'action', name: 'action'},
             ]
         });
         $('#regemployee').click(function () {
@@ -162,6 +180,38 @@
                 error: function (data) {
                     console.log('Error:'+data);
                     $('#regbtn').html('Save Changes');
+                }
+            });
+        });
+        $('body').on('click', '.editemp', function () {
+            var e_id = $(this).data('id');
+            $.get("{{ route('employees.index') }}" +'/' + e_id +'/edit', function (data) {
+                $('#modalheading').html('Edit Employee Details');
+                $('#regbtn').val("edit-user");
+                $('#regmodal').modal('show');
+                $('#e_id').val(data.id);
+                $('#fname').val(data.fname);
+                $('#lname').val(data.lname);
+                $('#dob').val(data.dob);
+                $('#address').val(data.address);
+                $('#city').val(data.city);
+                $('#contactnumber').val(data.contactnumber);
+                $('#email').val(data.email);
+                $('#password').val(data.password);
+                $('#confirmpassword').val(data.confirmpassword);
+            })
+        });
+        $('body').on('click', '.deleteemp', function () {
+            var e_id = $(this).data("id");
+            confirm("Are You sure want to delete !");
+            $.ajax({
+                type: "DELETE",
+                url: "{{ route('employees.store') }}" + '/' + e_id,
+                success: function (data) {
+                    table.draw();
+                },
+                error: function (data) {
+                    console.log('Error:', data);
                 }
             });
         });
