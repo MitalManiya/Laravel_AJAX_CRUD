@@ -55,16 +55,21 @@ class EmployeeAjaxController extends Controller
 //         dd('Form Submitted');
 
         $validatedData = $request->validate([
-            'fname' => 'required|max:255',
+            'fname' => 'required',
             'lname' => 'required',
             'dob' => 'required',
             'address' => 'required',
-            'city' => 'required',
+            'city' => 'required|not_in:---- Select city ----',  ////here ---- Select city ---- is the first option of dropdown
             'contactnumber' => 'required',
-            'email' => 'required|email',
+            'email' => 'required|email|unique:Employees', ////here Employees is the table name
             'password' => 'required|min:8',
             'confirmpassword' => 'required|same:password',
         ]);
+        //$input = request()->all();
+
+        $validatedData['password'] = bcrypt($validatedData['password']); ////here bcrypt is the  password hashing function
+        $validatedData['confirmpassword'] = bcrypt($validatedData['confirmpassword']);
+
         Employee::create($validatedData);
 
         return response()->json('Form is successfully validated and data has been saved');

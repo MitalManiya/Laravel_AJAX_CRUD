@@ -51,36 +51,59 @@
 {{--                    </div><br />--}}
 {{--                @endif--}}
 
+{{--                @if(Session::has('success'))--}}
+
+{{--                    <div class="alert alert-success">--}}
+
+{{--                        {{ Session::get('success') }}--}}
+
+{{--                        @php--}}
+
+{{--                            Session::forget('success');--}}
+
+{{--                        @endphp--}}
+
+{{--                    </div>--}}
+
+{{--                @endif--}}
+
+{{--                @if ($errors->any())--}}
+{{--                    <div class="alert alert-danger">--}}
+{{--                        <ul>--}}
+{{--                            @foreach ($errors->all() as $error)--}}
+{{--                                <li>{{ $error }}</li>--}}
+{{--                            @endforeach--}}
+{{--                        </ul>--}}
+{{--                    </div><br />--}}
+{{--                @endif--}}
+
                 <form id="empform" name="empform" class="form-horizontal" method="post">
+                    <div id="msg_div" class="errormsg alert alert-danger" style="display: none;">
+                         <span id="res_message"></span>
+                    </div>
                     <input type="hidden" name="eid" id="eid">
                     <div class="form-group">
                         <label for="fname" class="col-sm-4 control-label">First Name</label>
                         <div class="col-sm-12">
                             <input type="text" class="form-control" id="fname" name="fname" placeholder="Enter First Name" value="" maxlength="50" required="">
                         </div>
-{{--                        @if ($errors->has('fname'))--}}
-
-{{--                            <span class="text-danger">{{ $errors->first('fname') }}</span>--}}
-
-{{--                        @endif--}}
-
                     </div>
                     <div class="form-group">
                         <label for="lname" class="col-sm-4 control-label">Last Name</label>
                         <div class="col-sm-12">
-                            <input type="text" class="form-control" id="lname" name="lname" placeholder="Enter Last Name" value="" maxlength="50" required="">
+                            <input type="text" class="form-control" id="lname" name="lname" placeholder="Enter Last Name" value="" maxlength="50">
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="dob" class="col-sm-4 control-label">Date of Birth</label>
                         <div class='col-sm-12'>
-                            <input type='date' class="form-control" id='dob' name="dob" required/>
+                            <input type='date' class="form-control" id='dob' name="dob"/>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="address" class="col-sm-4 control-label">Address</label>
                         <div class='col-sm-12'>
-                            <textarea id="address" rows="2" name="address" class="col-sm-12" required></textarea>
+                            <textarea id="address" rows="2" name="address" class="col-sm-12"></textarea>
                         </div>
                     </div>
                     <div class="form-group">
@@ -97,26 +120,26 @@
                     <div class="form-group">
                         <label for="contactnumber" class="col-sm-4 control-label">Contact number</label>
                         <div class='col-sm-12'>
-                            <input type="text" name="contactnumber" class="form-control" id="contactnumber" maxlength="10" pattern="\d{10}" required/>
+                            <input type="text" name="contactnumber" class="form-control" id="contactnumber" maxlength="10" pattern="\d{10}"/>
 {{--                            <input type="number" class="form-control" id="contact"  min="10" max="10" required/>--}}
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="email" class="col-sm-4 control-label">Email</label>
                         <div class='col-sm-12'>
-                            <input type="email" class="form-control" id="email" name="email" required/>
+                            <input type="email" class="form-control" id="email" name="email"/>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="password" class="col-sm-4 control-label">Password</label>
                         <div class='col-sm-12'>
-                            <input type="password" class="form-control" id="password" name="password" required/>
+                            <input type="password" class="form-control" id="password" name="password"/>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="confirmpassword" class="col-sm-10 control-label">Confirm Password</label>
                         <div class='col-sm-12'>
-                            <input type="password" class="form-control" id="confirmpassword" name="confirmpassword" required/>
+                            <input type="password" class="form-control" id="confirmpassword" name="confirmpassword"/>
                         </div>
                     </div>
                     <div class="col-sm-12">
@@ -172,13 +195,20 @@
                 type: "POST",
                 dataType: 'json',
                 success: function (data) {
-                    console.log(data);
+                    console.log('sucess :'+data);
                     $('#empform').trigger("reset");
                     $('#regmodal').modal('hide');
                     table.draw();
                 },
                 error: function (data) {
-                    console.log('Error:'+data);
+                    console.log(data);
+                    console.log(data.responseText);
+                    console.log(data.responseText.message);
+
+                    $('#res_message').html(data.responseText);
+                    $('#msg_div').show();
+                    $('#res_message').show();
+
                     $('#regbtn').html('Save Changes');
                 }
             });
