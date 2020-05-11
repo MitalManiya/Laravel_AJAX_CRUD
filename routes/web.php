@@ -18,3 +18,8 @@ Route::get('/', function () {
 Route::resource('ajaxproducts','ProductAjaxController');
 
 Route::resource('employees','EmployeeAjaxController');
+
+Route::get('login', 'LoginController@showLogin');
+// route to process the form
+Route::post('login','LoginController@doLogin');
+Route::get('logout','LoginController@doLogout');

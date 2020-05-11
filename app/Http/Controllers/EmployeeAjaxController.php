@@ -86,4 +86,8 @@ class EmployeeAjaxController extends Controller
 
         return response()->json(['success'=>'Employee deleted successfully.']);
     }
+
+    public function fails(){
+        return "Login Fails";
+    }
 }
